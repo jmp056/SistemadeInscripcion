@@ -1,0 +1,176 @@
+﻿@page "/RegistroAsignaturas"
+@using Tarea4_SistemadeInscripcion.Controllers;
+@using Tarea4_SistemadeInscripcion.Models;
+
+<div class="container text-center">
+    <EditForm Model="Asignatura" OnValidSubmit="Guardar">
+        <DataAnnotationsValidator />
+
+        <h1>Registro de Asignaturas</h1>
+
+        <div class="form-group">
+            <div class="form-inline">
+                <label for="AsignatudaId" class="col-4">Codigo de la Asignatura:</label>
+                <InputNumber @bind-Value="Asignatura.AsignaturaId" class="form-control col-3" />
+                <button type="button" class="btn btn-outline-dark" @onclick="Buscar" style="margin: 5px">Buscar</button>
+            </div>
+        </div>
+
+        <div class="form-group">
+            <div class="form-inline">
+                <label for="Codigo" class="col-4">Codigo:</label>
+                <InputText @bind-Value="Asignatura.Codigo" class="form-control col-4" />
+            </div>
+        </div>
+
+        <div class="form-group">
+            <div class="form-inline">
+                <label for="Descripcion" class="col-4">Descripcion:</label>
+                <InputText @bind-Value="Asignatura.Descripcion" class="form-control col-4" />
+            </div>
+        </div>
+
+        <div class="form-group">
+            <div class="form-inline">
+                <label for="PreRequisito" class="col-4">Prerequisito:</label>
+                <InputText @bind-Value="Asignatura.PreRequisito" class="form-control col-4" />
+            </div>
+        </div>
+
+        <div class="form-group">
+            <div class="form-inline">
+                <label for="Creditos" class="col-4">Creditos:</label>
+                <InputNumber @bind-Value="Asignatura.Creditos" class="form-control col-3" />
+            </div>
+        </div>
+
+        <h3>@Mensaje</h3>
+        <ValidationSummary />
+
+        <div>
+            <button type="button" class="btn btn-outline-primary" @onclick="Limpiar" style="margin: 5px">Limpiar</button>
+            <button type="submit" class="btn btn-outline-success" style="margin: 5px">Guardar</button>
+            <button type="button" class="btn btn-outline-danger" @onclick="Eliminar" style="margin: 5px">Eliminar</button>
+        </div>
+
+    </EditForm>
+</div>
+
+@code{
+    Asignaturas Asignatura = new Asignaturas();
+    string Mensaje = string.Empty;
+
+    private void Guardar()
+    {
+        AsignaturasController asignaturasController = new AsignaturasController();
+
+        Asignaturas AsignaturaTemporal = new Asignaturas();
+        AsignaturaTemporal = asignaturasController.Buscar(Asignatura.AsignaturaId);
+        if (AsignaturaTemporal != null || Asignatura.AsignaturaId == 0)
+        {
+            if (asignaturasController.Insertar(Asignatura))
+            {
+                if (Asignatura.AsignaturaId == 0)
+                {
+                    Limpiar();
+                    Mensaje = "La asignatura se guardo de manera exitosa!...";
+                }
+                else
+                {
+                    Limpiar();
+                    Mensaje = "La asignatura se modifico de manera exitosa!...";
+                }
+
+            }
+            else
+            {
+                if (Asignatura.AsignaturaId == 0)
+                {
+                    Mensaje = "La asignatura no se pudo guardar de manera exitosa!...";
+                }
+                else
+                {
+                    Mensaje = "La asignatura no se pudo modificar de manera exitosa!...";
+                }
+
+            }
+
+        }
+        else
+        {
+            Mensaje = "No se puede modificar una asignatura que no existe!...";
+        }
+
+
+    }
+
+    private void Buscar()
+    {
+
+        AsignaturasController asignaturasController = new AsignaturasController();
+
+        Asignaturas AsignaturaTemporal = new Asignaturas();
+        AsignaturaTemporal = asignaturasController.Buscar(Asignatura.AsignaturaId);
+
+        if (AsignaturaTemporal != null)
+        {
+            Limpiar();
+            Asignatura = AsignaturaTemporal;
+            Mensaje = "Asignatura encontrada de manera exitosa!...";
+        }
+        else
+        {
+
+            Limpiar();
+            Mensaje = "La asignatura no pudo ser encontrada!...";
+        }
+
+    }
+
+    private void Eliminar()
+    {
+
+        AsignaturasController asignaturasController = new AsignaturasController();
+
+        try
+        {
+            Asignaturas AsignaturaTemporal = new Asignaturas();
+            AsignaturaTemporal = asignaturasController.Buscar(Asignatura.AsignaturaId);
+
+            if (AsignaturaTemporal == null)
+            {
+
+                Limpiar();
+                Mensaje = "No se puede eliminar una asignatura que no existe!...";
+            }
+            else
+            {
+
+                if (asignaturasController.Eliminar(Asignatura.AsignaturaId))
+                {
+                    Limpiar();
+                    Mensaje = "La asignatura fue eliminada de manera exitosa!...";
+                }
+                else
+                {
+
+                    Mensaje = "La asignatura no pudo ser eliminada!...";
+                }
+            }
+        }
+        catch (Exception)
+        {
+
+            throw;
+        }
+
+    }
+
+    private void Limpiar()
+    {
+
+        Asignatura = new Asignaturas();
+        Mensaje = string.Empty;
+    }
+
+}
