@@ -1,0 +1,45 @@
+﻿@page "/ConsultaAsignaturas"
+@using Tarea4_SistemadeInscripcion.Controllers;
+@using Tarea4_SistemadeInscripcion.Models;
+
+<div class="container text-center">
+    <h3>Consulta de Asignaturas</h3>
+
+    <table class="table">
+        <thead>
+            <tr>
+                <th>Id</th>
+                <th>Codigo</th>
+                <th>Descripcion</th>
+                <th>PreRequisito</th>
+                <th>Creditos</th>
+            </tr>
+
+        </thead>
+        <tbody>
+            @foreach (var item in ListadoAsignaturas)
+            {
+            <tr>
+                <th>@item.AsignaturaId</th>
+                <th>@item.Codigo.</th>
+                <th>@item.Descripcion</th>
+                <th>@item.PreRequisito</th>
+                <th>@item.Creditos.</th>
+                <th><a href="/RegistroAsignaturas" class="btn btn-outline-info">Ver</a></th>
+            </tr>
+            }
+        </tbody>
+    </table>
+</div>
+
+
+@code {
+
+    public List<Asignaturas> ListadoAsignaturas;
+
+    protected override void OnInitialized()
+    {
+        AsignaturasController asignaturasController = new AsignaturasController();
+        ListadoAsignaturas = asignaturasController.GetList(e => true);
+    }
+}
