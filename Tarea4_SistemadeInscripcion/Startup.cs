@@ -9,7 +9,6 @@ using Microsoft.AspNetCore.HttpsPolicy;
 using Microsoft.Extensions.Configuration;
 using Microsoft.Extensions.DependencyInjection;
 using Microsoft.Extensions.Hosting;
-using Tarea4_SistemadeInscripcion.Data;
 
 namespace Tarea4_SistemadeInscripcion
 {
