@@ -11,7 +11,7 @@ namespace Tarea4_SistemadeInscripcion.Controllers
 {
     public class InscripcionesController
     {
-        public bool Insertar(Pagos Inscripcion)
+        public bool Insertar(Inscripciones Inscripcion)
         {
             bool paso = false;
             Contexto contexto = new Contexto();
@@ -38,7 +38,7 @@ namespace Tarea4_SistemadeInscripcion.Controllers
             return paso;
         }
 
-        public static bool Guardar(Pagos Inscripcion)
+        public static bool Guardar(Inscripciones Inscripcion)
         {
 
             bool paso = false;
@@ -64,7 +64,7 @@ namespace Tarea4_SistemadeInscripcion.Controllers
             return paso;
         }
 
-        public static bool Modificar(Pagos Inscripcion)
+        public static bool Modificar(Inscripciones Inscripcion)
         {
 
             bool paso = false;
@@ -95,7 +95,7 @@ namespace Tarea4_SistemadeInscripcion.Controllers
 
             bool paso = false;
             Contexto contexto = new Contexto();
-            Pagos Inscripcion = contexto.Inscripciones.Find(Id);
+            Inscripciones Inscripcion = contexto.Inscripciones.Find(Id);
 
             try
             {
@@ -117,11 +117,11 @@ namespace Tarea4_SistemadeInscripcion.Controllers
             return paso;
         }
 
-        public Pagos Buscar(int Id)
+        public Inscripciones Buscar(int Id)
         {
 
             Contexto contexto = new Contexto();
-            Pagos Inscripcion = new Pagos();
+            Inscripciones Inscripcion = new Inscripciones();
 
             try
             {
@@ -142,11 +142,11 @@ namespace Tarea4_SistemadeInscripcion.Controllers
             return Inscripcion;
         }
 
-        public List<Pagos> GetList(Expression<Func<Pagos, bool>> expression)
+        public List<Inscripciones> GetList(Expression<Func<Inscripciones, bool>> expression)
         {
 
             Contexto contexto = new Contexto();
-            List<Pagos> ListadoInscripciones = new List<Pagos>();
+            List<Inscripciones> ListadoInscripciones = new List<Inscripciones>();
 
             try
             {

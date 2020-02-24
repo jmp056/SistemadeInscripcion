@@ -1,0 +1,205 @@
+﻿@page "/RegistroInscripciones"
+@using Tarea4_SistemadeInscripcion.Controllers;
+@using Tarea4_SistemadeInscripcion.Models;
+
+<div class="container text-center">
+    <EditForm Model="Inscripcion" OnValidSubmit="Guardar">
+        <DataAnnotationsValidator />
+
+        <h1>Registro de Inscripciones</h1>
+
+        <div class="form-group">
+            <div class="form-inline">
+                <label for="InscripcionId" class="col-4">Codigo de la Inscripcion:</label>
+                <InputNumber @bind-Value="Inscripcion.InscripcionId" class="form-control col-3" />
+                <button type="button" class="btn btn-outline-dark" @onclick="Buscar" style="margin: 5px">Buscar</button>
+            </div>
+        </div>
+
+        <div class="form-group">
+            <div class="form-inline">
+                <label for="Fecha" class="col-4">Fecha:</label>
+                <InputDate @bind-Value="Inscripcion.Fecha" class="form-control col-3" />
+            </div>
+        </div>
+
+        <div class="form-group">
+            <div class="form-inline">
+                <label for="Semestre" class="col-4">Semestre:</label>
+                <InputText @bind-Value="Inscripcion.Semestre" class="form-control col-4" />
+            </div>
+        </div>
+        <div class="form-group">
+            <div class="form-inline">
+                <label for="EstudianteId" class="col-4">Codigo del Estudiante:</label>
+                <InputNumber @bind-Value="Inscripcion.EstudianteId" class="form-control col-3" />
+            </div>
+        </div>
+
+        <div class="form-group">
+            <div class="form-inline">
+                <label for="Limite" class="col-4">Limite de creditos:</label>
+                <InputNumber @bind-Value="Inscripcion.Limite" class="form-control col-4"/>
+            </div>
+        </div>
+
+        <div class="form-group">
+            <div class="form-inline">
+                <label for="Tomados" class="col-4">Creditos tomados:</label>
+                <InputNumber @bind-Value="Inscripcion.Tomados" class="form-control col-4" />
+            </div>
+        </div>
+
+        <div class="form-group">
+            <div class="form-inline">
+                <label for="Disponibles" class="col-4">Creditos disponibles:</label>
+                <InputNumber @bind-Value="Inscripcion.Disponibles" class="form-control col-4" />
+            </div>
+        </div>
+
+        <div class="form-group">
+            <div class="form-inline">
+                <label for="Balance" class="col-4">Balance:</label>
+                <InputNumber @bind-Value="Inscripcion.Balance" class="form-control col-4" />
+            </div>
+        </div>
+        <h3>@Mensaje</h3>
+        <ValidationSummary />
+
+        <div>
+            <button type="button" class="btn btn-outline-primary" @onclick="Limpiar" style="margin: 5px">Limpiar</button>
+            <button type="submit" class="btn btn-outline-success" style="margin: 5px">Guardar</button>
+            <button type="button" class="btn btn-outline-danger" @onclick="Eliminar" style="margin: 5px">Eliminar</button>
+        </div>
+
+    </EditForm>
+</div>
+
+@code{
+    Inscripciones Inscripcion = new Inscripciones();
+    string Mensaje = string.Empty;
+
+    private void Guardar()
+    {
+        int estado = 0;
+        InscripcionesController inscripcionesController = new InscripcionesController();
+
+        Inscripciones InscripcionTemporal = new Inscripciones();
+        InscripcionTemporal = inscripcionesController.Buscar(Inscripcion.InscripcionId);
+        if (InscripcionTemporal != null || Inscripcion.InscripcionId == 0)
+        {
+            if(estado == 0)
+            {
+                estado = 1;
+            }
+            if (inscripcionesController.Insertar(Inscripcion))
+            {
+                if (estado == 1)
+                {
+                    Limpiar();
+                    Mensaje = "La inscripcion se guardo de manera exitosa!...";
+                }
+                else
+                {
+                    Limpiar();
+                    Mensaje = "La inscripcion se modifico de manera exitosa!...";
+                }
+
+            }
+            else
+            {
+                if (estado == 0)
+                {
+                    Mensaje = "La inscripcion no se pudo guardar de manera exitosa!...";
+                }
+                else
+                {
+                    Mensaje = "La inscripcion no se pudo modificar de manera exitosa!...";
+                }
+
+            }
+
+        }
+        else
+        {
+            Mensaje = "No se puede modificar un inscripcion que no existe!...";
+        }
+
+
+    }
+
+    private void Buscar()
+    {
+
+        InscripcionesController inscripcionesController = new InscripcionesController();
+
+        Inscripciones InscripcionTemporal = new Inscripciones();
+        InscripcionTemporal = inscripcionesController.Buscar(Inscripcion.InscripcionId);
+
+        if (InscripcionTemporal != null)
+        {
+            Limpiar();
+            Inscripcion = InscripcionTemporal;
+            Mensaje = "Inscripcion encontrada de manera exitosa!...";
+        }
+        else
+        {
+
+            Limpiar();
+            Mensaje = "La inscripcion no pudo ser encontrada!...";
+        }
+
+    }
+
+    private void Eliminar()
+    {
+
+        InscripcionesController inscripcionesController = new InscripcionesController();
+
+        try
+        {
+            Inscripciones InscripcionTemporal = new Inscripciones();
+            InscripcionTemporal = inscripcionesController.Buscar(Inscripcion.InscripcionId);
+
+            if (InscripcionTemporal == null)
+            {
+
+                Limpiar();
+                Mensaje = "No se puede eliminar una inscripcion que no existe!...";
+            }
+            else
+            {
+
+                if (inscripcionesController.Eliminar(Inscripcion.InscripcionId))
+                {
+                    Limpiar();
+                    Mensaje = "La inscripcion fue eliminada de manera exitosa";
+                }
+                else
+                {
+
+                    Mensaje = "La inscripcion no pudo ser eliminada de manera exitosa";
+                }
+            }
+        }
+        catch (Exception)
+        {
+
+            throw;
+        }
+
+    }
+
+    private void Limpiar()
+    {
+
+        Inscripcion = new Inscripciones();
+        Mensaje = string.Empty;
+    }
+
+    private void Calcular()
+    {
+        Inscripcion.Disponibles = Inscripcion.Limite - Inscripcion.Tomados;
+    }
+
+}
