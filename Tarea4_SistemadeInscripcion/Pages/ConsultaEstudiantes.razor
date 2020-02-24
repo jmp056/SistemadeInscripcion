@@ -1,0 +1,43 @@
+﻿@page "/ConsultaEstudiantes"
+@using Tarea4_SistemadeInscripcion.Controllers;
+@using Tarea4_SistemadeInscripcion.Models;
+
+<div class="container text-center">
+    <h3>Consulta de Estudiantes</h3>
+
+    <table class="table">
+        <thead>
+            <tr>
+                <th>Id</th>
+                <th>Matricula</th>
+                <th>Nombre</th>
+                <th>Balance</th>
+            </tr>
+
+        </thead>
+        <tbody>
+            @foreach (var item in ListadoEstudiantes)
+            {
+            <tr>
+                <th>@item.EstudianteId</th>
+                <th>@item.Matricula.</th>
+                <th>@item.Nombres</th>
+                <th>@item.Balance</th>
+                <th><a href="/RegistroEstudiantes" class="btn btn-outline-info">Ver</a></th>
+            </tr>
+            }
+        </tbody>
+    </table>
+</div>
+
+
+@code {
+
+    public List<Estudiantes> ListadoEstudiantes;
+
+    protected override void OnInitialized()
+    {
+        EstudiantesController estudiantesController = new EstudiantesController();
+        ListadoEstudiantes = estudiantesController.GetList(e => true);
+    }
+}
