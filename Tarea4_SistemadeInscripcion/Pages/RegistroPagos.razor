@@ -1,0 +1,173 @@
+﻿@page "/RegistroPagos"
+@using Tarea4_SistemadeInscripcion.Controllers;
+@using Tarea4_SistemadeInscripcion.Models;
+
+<div class="container text-center">
+    <EditForm Model="Pago" OnValidSubmit="Guardar">
+        <DataAnnotationsValidator />
+
+        <h1>Registro de Pagos</h1>
+
+        <div class="form-group">
+            <div class="form-inline">
+                <label for="PagoId" class="col-4">Codigo del Pago:</label>
+                <InputNumber @bind-Value="Pago.PagoId" class="form-control col-3" />
+                <button type="button" class="btn btn-outline-dark" @onclick="Buscar" style="margin: 5px">Buscar</button>
+            </div>
+        </div>
+
+        <div class="form-group">
+            <div class="form-inline">
+                <label for="Fecha" class="col-4">Fecha:</label>
+                <InputDate @bind-Value="Pago.Fecha" class="form-control col-3" />
+            </div>
+        </div>
+
+        <div class="form-group">
+            <div class="form-inline">
+                <label for="InscripcionId" class="col-4">Codigo de la Inscripcion:</label>
+                <InputNumber @bind-Value="Pago.InscripcionId" class="form-control col-3" />
+            </div>
+        </div>
+
+        <div class="form-group">
+            <div class="form-inline">
+                <label for="Monto" class="col-4">Monto:</label>
+                <InputNumber @bind-Value="Pago.Monto" class="form-control col-3" />
+            </div>
+        </div>
+
+        <h3>@Mensaje</h3>
+        <ValidationSummary />
+
+        <div>
+            <button type="button" class="btn btn-outline-primary" @onclick="Limpiar" style="margin: 5px">Limpiar</button>
+            <button type="submit" class="btn btn-outline-success" style="margin: 5px">Guardar</button>
+            <button type="button" class="btn btn-outline-danger" @onclick="Eliminar" style="margin: 5px">Eliminar</button>
+        </div>
+
+    </EditForm>
+</div>
+
+@code{
+    Pagos Pago = new Pagos();
+    string Mensaje = string.Empty;
+
+    private void Guardar()
+    {
+        int estado = 0;
+        PagosController pagosController = new PagosController();
+
+        Pagos PagoTemporal = new Pagos();
+        PagoTemporal = pagosController.Buscar(Pago.PagoId);
+        if (PagoTemporal != null || Pago.PagoId == 0)
+        {
+            if(Pago.PagoId== 0)
+            {
+                estado = 1;
+            }
+            if (pagosController.Insertar(Pago))
+            {
+                if (estado == 1)
+                {
+                    Limpiar();
+                    Mensaje = "El pago se guardo de manera exitosa!...";
+                }
+                else
+                {
+                    Limpiar();
+                    Mensaje = "El pago se modifico de manera exitosa!...";
+                }
+
+            }
+            else
+            {
+                if (estado == 1)
+                {
+                    Mensaje = "El pago no se pudo guardar de manera exitosa!...";
+                }
+                else
+                {
+                    Mensaje = "El pago no se pudo modificar de manera exitosa!...";
+                }
+
+            }
+
+        }
+        else
+        {
+            Mensaje = "No se puede modificar un pago que no existe!...";
+        }
+
+
+    }
+
+    private void Buscar()
+    {
+
+        PagosController pagosController = new PagosController();
+
+        Pagos PagoTemporal = new Pagos();
+        PagoTemporal = pagosController.Buscar(Pago.PagoId);
+
+        if (PagoTemporal != null)
+        {
+            Limpiar();
+            Pago = PagoTemporal;
+            Mensaje = "Pago encontrado de manera exitosa!...";
+        }
+        else
+        {
+
+            Limpiar();
+            Mensaje = "El pago no pudo ser encontrado!...";
+        }
+
+    }
+
+    private void Eliminar()
+    {
+        PagosController pagosController = new PagosController();
+
+        try
+        {         
+            Pagos PagoTemporal = new Pagos();
+            PagoTemporal = pagosController.Buscar(Pago.PagoId);
+
+            if (PagoTemporal == null)
+            {
+
+                Limpiar();
+                Mensaje = "No se puede eliminar un pago que no existe!...";
+            }
+            else
+            {
+
+                if (pagosController.Eliminar(Pago.PagoId))
+                {
+                    Limpiar();
+                    Mensaje = "El pago fue eliminado de manera exitosa!...";
+                }
+                else
+                {
+
+                    Mensaje = "El pago no pudo ser eliminada!...";
+                }
+            }
+        }
+        catch (Exception)
+        {
+
+            throw;
+        }
+
+    }
+
+    private void Limpiar()
+    {
+
+        Pago = new Pagos();
+        Mensaje = string.Empty;
+    }
+
+}

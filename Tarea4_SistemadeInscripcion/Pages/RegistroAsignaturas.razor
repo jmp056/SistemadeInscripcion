@@ -62,15 +62,20 @@
 
     private void Guardar()
     {
+        int estado = 0;
         AsignaturasController asignaturasController = new AsignaturasController();
 
         Asignaturas AsignaturaTemporal = new Asignaturas();
         AsignaturaTemporal = asignaturasController.Buscar(Asignatura.AsignaturaId);
         if (AsignaturaTemporal != null || Asignatura.AsignaturaId == 0)
         {
+            if(Asignatura.AsignaturaId== 0)
+            {
+                estado = 1;
+            }
             if (asignaturasController.Insertar(Asignatura))
             {
-                if (Asignatura.AsignaturaId == 0)
+                if (estado == 1)
                 {
                     Limpiar();
                     Mensaje = "La asignatura se guardo de manera exitosa!...";
@@ -84,7 +89,7 @@
             }
             else
             {
-                if (Asignatura.AsignaturaId == 0)
+                if (estado == 1)
                 {
                     Mensaje = "La asignatura no se pudo guardar de manera exitosa!...";
                 }
