@@ -1,0 +1,51 @@
+﻿@page "/ConsultaInscripciones"
+@using Tarea4_SistemadeInscripcion.Controllers;
+@using Tarea4_SistemadeInscripcion.Models;
+
+<div class="container text-center">
+    <h3>Consulta de Inscripciones</h3>
+
+    <table class="table">
+        <thead>
+            <tr>
+                <th>Id</th>
+                <th>Fecha</th>
+                <th>Semestre</th>
+                <th>Estudiante</th>
+                <th>Limite</th>
+                <th>Tomados</th>
+                <th>Disponibles</th>
+                <th>Balance</th>
+            </tr>
+
+        </thead>
+        <tbody>
+            @foreach (var item in ListadoInscripciones)
+            {
+            <tr>
+                <th>@item.InscripcionId</th>
+                <th>@item.Fecha.</th>
+                <th>@item.Semestre</th>
+                <th>@item.EstudianteId</th>
+                <th>@item.Limite</th>
+                <th>@item.Tomados</th>
+                <th>@item.Disponibles</th>
+                <th>@item.Balance</th>
+                <th><a href="/RegistroInscripciones" class="btn btn-outline-info">Ver</a></th>
+            </tr>
+            }
+        </tbody>
+    </table>
+</div>
+
+
+@code {
+
+    public List<Inscripciones> ListadoInscripciones;
+
+    protected override void OnInitialized()
+    {
+        InscripcionesController inscripcionesController = new InscripcionesController();
+        ListadoInscripciones = inscripcionesController.GetList(e => true);
+    }
+}
