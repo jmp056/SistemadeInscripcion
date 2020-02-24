@@ -9,23 +9,23 @@ using Tarea4_SistemadeInscripcion.Models;
 
 namespace Tarea4_SistemadeInscripcion.Controllers
 {
-    public class InscripcionesController
+    public class PagosController
     {
-        public bool Insertar(Pagos Inscripcion)
+        public bool Insertar(Pagos Pago)
         {
             bool paso = false;
             Contexto contexto = new Contexto();
             try
             {
-                if (Inscripcion.InscripcionId == 0)
+                if (Pago.PagoId == 0)
                 {
 
-                    paso = Guardar(Inscripcion);
+                    paso = Guardar(Pago);
                 }
                 else
                 {
 
-                    paso = Modificar(Inscripcion);
+                    paso = Modificar(Pago);
                 }
             }
             catch (Exception)
@@ -38,7 +38,7 @@ namespace Tarea4_SistemadeInscripcion.Controllers
             return paso;
         }
 
-        public static bool Guardar(Pagos Inscripcion)
+        public static bool Guardar(Pagos Pago)
         {
 
             bool paso = false;
@@ -47,7 +47,7 @@ namespace Tarea4_SistemadeInscripcion.Controllers
             try
             {
 
-                contexto.Inscripciones.Add(Inscripcion);
+                contexto.Pagos.Add(Pago);
                 paso = contexto.SaveChanges() > 0;
             }
             catch (Exception)
@@ -64,7 +64,7 @@ namespace Tarea4_SistemadeInscripcion.Controllers
             return paso;
         }
 
-        public static bool Modificar(Pagos Inscripcion)
+        public static bool Modificar(Pagos Pago)
         {
 
             bool paso = false;
@@ -73,7 +73,7 @@ namespace Tarea4_SistemadeInscripcion.Controllers
             try
             {
 
-                contexto.Entry(Inscripcion).State = EntityState.Modified;
+                contexto.Entry(Pago).State = EntityState.Modified;
                 paso = contexto.SaveChanges() > 0;
             }
             catch (Exception)
@@ -95,12 +95,12 @@ namespace Tarea4_SistemadeInscripcion.Controllers
 
             bool paso = false;
             Contexto contexto = new Contexto();
-            Pagos Inscripcion = contexto.Inscripciones.Find(Id);
+            Pagos Pago = contexto.Pagos.Find(Id);
 
             try
             {
 
-                contexto.Entry(Inscripcion).State = EntityState.Deleted;
+                contexto.Entry(Pago).State = EntityState.Deleted;
                 paso = contexto.SaveChanges() > 0;
             }
             catch (Exception)
@@ -121,12 +121,12 @@ namespace Tarea4_SistemadeInscripcion.Controllers
         {
 
             Contexto contexto = new Contexto();
-            Pagos Inscripcion = new Pagos();
+            Pagos Pago = new Pagos();
 
             try
             {
 
-                Inscripcion = contexto.Inscripciones.Find(Id);
+                Pago = contexto.Pagos.Find(Id);
             }
             catch (Exception)
             {
@@ -139,19 +139,19 @@ namespace Tarea4_SistemadeInscripcion.Controllers
                 contexto.Dispose();
             }
 
-            return Inscripcion;
+            return Pago;
         }
 
         public List<Pagos> GetList(Expression<Func<Pagos, bool>> expression)
         {
 
             Contexto contexto = new Contexto();
-            List<Pagos> ListadoInscripciones = new List<Pagos>();
+            List<Pagos> ListadoPagos = new List<Pagos>();
 
             try
             {
 
-                ListadoInscripciones = contexto.Inscripciones.Where(expression).ToList();
+                ListadoPagos = contexto.Pagos.Where(expression).ToList();
             }
             catch (Exception)
             {
@@ -164,7 +164,7 @@ namespace Tarea4_SistemadeInscripcion.Controllers
                 contexto.Dispose();
             }
 
-            return ListadoInscripciones;
+            return ListadoPagos;
         }
     }
 }

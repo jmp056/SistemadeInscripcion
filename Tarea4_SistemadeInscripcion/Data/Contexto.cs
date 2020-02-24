@@ -11,7 +11,7 @@ namespace Tarea4_SistemadeInscripcion.Data
     {
         public DbSet<Asignaturas> Asignaturas { get; set; }
         public DbSet<Estudiantes> Estudiantes { get; set; }
-        public DbSet<Inscripciones> Inscripciones { get; set; }
+        public DbSet<Pagos> Inscripciones { get; set; }
         public DbSet<Pagos> Pagos { get; set; }
         protected override void OnConfiguring(DbContextOptionsBuilder optionsBuilder)
         {
