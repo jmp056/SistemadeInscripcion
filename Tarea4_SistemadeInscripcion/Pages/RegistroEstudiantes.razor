@@ -20,6 +20,7 @@
             <div class="form-inline">
                 <label for="Matricula" class="col-4">Matricula:</label>
                 <InputText @bind-Value="Estudiante.Matricula" class="form-control col-4" />
+                <ValidationMessage For="@(() => Estudiante.Matricula)" />
             </div>
         </div>
 
@@ -27,6 +28,7 @@
             <div class="form-inline">
                 <label for="Nombres" class="col-4">Nombres:</label>
                 <InputText @bind-Value="Estudiante.Nombres" class="form-control col-4" />
+                <ValidationMessage For="@(() => Estudiante.Nombres)" />
             </div>
         </div>
 
@@ -35,7 +37,7 @@
                 <label for="Balance" class="col-4">Balance:</label>
                 <InputNumber @bind-Value="Estudiante.Balance" class="form-control col-3" />
             </div>
-        </div>   
+        </div>
 
         <h3>@Mensaje</h3>
         <ValidationSummary />

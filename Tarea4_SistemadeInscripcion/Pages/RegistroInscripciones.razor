@@ -27,19 +27,22 @@
             <div class="form-inline">
                 <label for="Semestre" class="col-4">Semestre:</label>
                 <InputText @bind-Value="Inscripcion.Semestre" class="form-control col-4" />
+                <ValidationMessage For="@(() => Inscripcion.Semestre)" />
             </div>
         </div>
         <div class="form-group">
             <div class="form-inline">
                 <label for="EstudianteId" class="col-4">Codigo del Estudiante:</label>
                 <InputNumber @bind-Value="Inscripcion.EstudianteId" class="form-control col-3" />
+                <ValidationMessage For="@(() => Inscripcion.EstudianteId)" />
             </div>
         </div>
 
         <div class="form-group">
             <div class="form-inline">
                 <label for="Limite" class="col-4">Limite de creditos:</label>
-                <InputNumber @bind-Value="Inscripcion.Limite" class="form-control col-4"/>
+                <InputNumber @bind-Value="Inscripcion.Limite" class="form-control col-4" />
+                <ValidationMessage For="@(() => Inscripcion.Limite)" />
             </div>
         </div>
 
@@ -47,6 +50,7 @@
             <div class="form-inline">
                 <label for="Tomados" class="col-4">Creditos tomados:</label>
                 <InputNumber @bind-Value="Inscripcion.Tomados" class="form-control col-4" />
+                <ValidationMessage For="@(() => Inscripcion.Tomados)" />
             </div>
         </div>
 
@@ -54,6 +58,7 @@
             <div class="form-inline">
                 <label for="Disponibles" class="col-4">Creditos disponibles:</label>
                 <InputNumber @bind-Value="Inscripcion.Disponibles" class="form-control col-4" />
+                <ValidationMessage For="@(() => Inscripcion.Disponibles)" />
             </div>
         </div>
 

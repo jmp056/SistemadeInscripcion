@@ -1,0 +1,43 @@
+﻿@page "/ConsultaPagos"
+@using Tarea4_SistemadeInscripcion.Controllers;
+@using Tarea4_SistemadeInscripcion.Models;
+
+<div class="container text-center">
+    <h3>Consulta de Pagos</h3>
+
+    <table class="table">
+        <thead>
+            <tr>
+                <th>Id</th>
+                <th>Fecha</th>
+                <th>Inscripcion</th>
+                <th>Monto</th>
+            </tr>
+
+        </thead>
+        <tbody>
+            @foreach (var item in ListadoPagos)
+            {
+            <tr>
+                <th>@item.PagoId</th>
+                <th>@item.Fecha.</th>
+                <th>@item.InscripcionId</th>
+                <th>@item.Monto</th>
+                <th><a href="/RegistroPagos" class="btn btn-outline-info">Ver</a></th>
+            </tr>
+            }
+        </tbody>
+    </table>
+</div>
+
+
+@code {
+
+    public List<Pagos> ListadoPagos;
+
+    protected override void OnInitialized()
+    {
+        PagosController pagosController = new PagosController();
+        ListadoPagos = pagosController.GetList(e => true);
+    }
+}

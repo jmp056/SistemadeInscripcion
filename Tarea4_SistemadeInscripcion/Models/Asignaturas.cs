@@ -10,9 +10,12 @@ namespace Tarea4_SistemadeInscripcion.Models
     {
         [Key]
         public int  AsignaturaId{ get; set; }
+        [Required(ErrorMessage = "El codigo no puede estar vacio!..")]
         public string Codigo { get; set; }
+        [Required(ErrorMessage = "La descripcion no puede estar vacia!..")]
         public string Descripcion { get; set; }
         public string PreRequisito { get; set; }
+        [Range(minimum: 1, maximum: 7, ErrorMessage = "La cantidad de creditos debe estar entre 1 y 7!...")]
         public int Creditos { get; set; }
 
         public Asignaturas()

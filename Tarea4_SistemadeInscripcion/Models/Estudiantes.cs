@@ -10,7 +10,9 @@ namespace Tarea4_SistemadeInscripcion.Models
     {
         [Key]
         public int EstudianteId { get; set; }
+        [Required(ErrorMessage = "La matricula no puede estar vacia!..")]
         public string Matricula { get; set; }
+        [Required(ErrorMessage = "El nombre no puede estar vacia!..")]
         public string Nombres { get; set; }
         public float Balance { get; set; }
 
