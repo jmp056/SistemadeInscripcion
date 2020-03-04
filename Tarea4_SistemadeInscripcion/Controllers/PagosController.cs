@@ -46,7 +46,7 @@ namespace Tarea4_SistemadeInscripcion.Controllers
 
             try
             {
-
+                contexto.Estudiantes.Find(Pago.EstudianteId).Balance -= Pago.Monto;
                 contexto.Pagos.Add(Pago);
                 paso = contexto.SaveChanges() > 0;
             }
@@ -72,7 +72,6 @@ namespace Tarea4_SistemadeInscripcion.Controllers
 
             try
             {
-
                 contexto.Entry(Pago).State = EntityState.Modified;
                 paso = contexto.SaveChanges() > 0;
             }
@@ -95,11 +94,10 @@ namespace Tarea4_SistemadeInscripcion.Controllers
 
             bool paso = false;
             Contexto contexto = new Contexto();
-            Pagos Pago = contexto.Pagos.Find(Id);
 
             try
             {
-
+                Pagos Pago = contexto.Pagos.Find(Id);
                 contexto.Entry(Pago).State = EntityState.Deleted;
                 paso = contexto.SaveChanges() > 0;
             }

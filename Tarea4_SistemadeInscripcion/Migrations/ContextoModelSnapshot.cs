@@ -23,12 +23,14 @@ namespace Tarea4_SistemadeInscripcion.Migrations
                         .HasColumnType("INTEGER");
 
                     b.Property<string>("Codigo")
+                        .IsRequired()
                         .HasColumnType("TEXT");
 
                     b.Property<int>("Creditos")
                         .HasColumnType("INTEGER");
 
                     b.Property<string>("Descripcion")
+                        .IsRequired()
                         .HasColumnType("TEXT");
 
                     b.Property<string>("PreRequisito")
@@ -49,9 +51,11 @@ namespace Tarea4_SistemadeInscripcion.Migrations
                         .HasColumnType("REAL");
 
                     b.Property<string>("Matricula")
+                        .IsRequired()
                         .HasColumnType("TEXT");
 
                     b.Property<string>("Nombres")
+                        .IsRequired()
                         .HasColumnType("TEXT");
 
                     b.HasKey("EstudianteId");
@@ -59,13 +63,38 @@ namespace Tarea4_SistemadeInscripcion.Migrations
                     b.ToTable("Estudiantes");
                 });
 
+            modelBuilder.Entity("Tarea4_SistemadeInscripcion.Models.InscripcionDetalle", b =>
+                {
+                    b.Property<int>("InscripcionDetalleId")
+                        .ValueGeneratedOnAdd()
+                        .HasColumnType("INTEGER");
+
+                    b.Property<int>("AsignaturaId")
+                        .HasColumnType("INTEGER");
+
+                    b.Property<int>("Creditos")
+                        .HasColumnType("INTEGER");
+
+                    b.Property<string>("DescripcionAsignatura")
+                        .HasColumnType("TEXT");
+
+                    b.Property<int>("InscripcionId")
+                        .HasColumnType("INTEGER");
+
+                    b.Property<float>("SubTotal")
+                        .HasColumnType("REAL");
+
+                    b.HasKey("InscripcionDetalleId");
+
+                    b.HasIndex("InscripcionId");
+
+                    b.ToTable("InscripcionDetalles");
+                });
+
             modelBuilder.Entity("Tarea4_SistemadeInscripcion.Models.Inscripciones", b =>
                 {
                     b.Property<int>("InscripcionId")
                         .ValueGeneratedOnAdd()
-                        .HasColumnType("INTEGER");
-
-                    b.Property<int>("Balance")
                         .HasColumnType("INTEGER");
 
                     b.Property<int>("Disponibles")
@@ -78,6 +107,9 @@ namespace Tarea4_SistemadeInscripcion.Migrations
                         .HasColumnType("TEXT");
 
                     b.Property<int>("Limite")
+                        .HasColumnType("INTEGER");
+
+                    b.Property<int>("Monto")
                         .HasColumnType("INTEGER");
 
                     b.Property<string>("Semestre")
@@ -98,11 +130,11 @@ namespace Tarea4_SistemadeInscripcion.Migrations
                         .ValueGeneratedOnAdd()
                         .HasColumnType("INTEGER");
 
+                    b.Property<int>("EstudianteId")
+                        .HasColumnType("INTEGER");
+
                     b.Property<DateTime>("Fecha")
                         .HasColumnType("TEXT");
-
-                    b.Property<int>("InscripcionId")
-                        .HasColumnType("INTEGER");
 
                     b.Property<float>("Monto")
                         .HasColumnType("REAL");
@@ -110,6 +142,15 @@ namespace Tarea4_SistemadeInscripcion.Migrations
                     b.HasKey("PagoId");
 
                     b.ToTable("Pagos");
+                });
+
+            modelBuilder.Entity("Tarea4_SistemadeInscripcion.Models.InscripcionDetalle", b =>
+                {
+                    b.HasOne("Tarea4_SistemadeInscripcion.Models.Inscripciones", null)
+                        .WithMany("DetalleAsignaturas")
+                        .HasForeignKey("InscripcionId")
+                        .OnDelete(DeleteBehavior.Cascade)
+                        .IsRequired();
                 });
 #pragma warning restore 612, 618
         }

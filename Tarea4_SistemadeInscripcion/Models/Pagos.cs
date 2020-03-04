@@ -12,8 +12,8 @@ namespace Tarea4_SistemadeInscripcion.Models
         public int PagoId { get; set; }
         public DateTime Fecha { get; set; }
         [Required]
-        [Range(minimum: 1, maximum: 999999999999, ErrorMessage = "El pago debe tener asignado una inscripcion!...")]
-        public int InscripcionId { get; set; }
+        [Range(minimum: 1, maximum: 999999999999, ErrorMessage = "El pago debe tener asignado un estudiante!...")]
+        public int EstudianteId { get; set; }
         [Required]
         [Range(minimum: 1, maximum: 999999999999, ErrorMessage = "El monto pagado debe ser mayor a 0!...")]
         public float Monto { get; set; }
@@ -22,7 +22,7 @@ namespace Tarea4_SistemadeInscripcion.Models
         {
             PagoId = 0;
             Fecha = DateTime.Now;
-            InscripcionId = 0;
+            EstudianteId = 0;
             Monto = 0;
         }
     }

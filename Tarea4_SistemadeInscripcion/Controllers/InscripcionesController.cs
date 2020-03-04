@@ -43,9 +43,14 @@ namespace Tarea4_SistemadeInscripcion.Controllers
 
             bool paso = false;
             Contexto contexto = new Contexto();
+            EstudiantesController estudiantesController = new EstudiantesController();
 
             try
             {
+
+                var Estudiante = estudiantesController.Buscar(Inscripcion.EstudianteId);
+                Estudiante.Balance += Inscripcion.Monto;
+                estudiantesController.Insertar(Estudiante);
 
                 contexto.Inscripciones.Add(Inscripcion);
                 paso = contexto.SaveChanges() > 0;
@@ -69,9 +74,39 @@ namespace Tarea4_SistemadeInscripcion.Controllers
 
             bool paso = false;
             Contexto contexto = new Contexto();
+            InscripcionesController inscripcionesController = new InscripcionesController();
+            EstudiantesController estudiantesController = new EstudiantesController();
 
             try
             {
+                var Estudiante = estudiantesController.Buscar(Inscripcion.EstudianteId);
+                var InscripcionAnterior = inscripcionesController.Buscar(Inscripcion.InscripcionId);
+
+                Estudiante.Balance -= InscripcionAnterior.Monto;
+                contexto.Inscripciones.Add(Inscripcion);
+
+                foreach (var item in InscripcionAnterior.DetalleAsignaturas)
+                {
+                    if (!Inscripcion.DetalleAsignaturas.Any(p => p.InscripcionDetalleId == item.InscripcionDetalleId))
+                    {
+                        contexto.Entry(item).State = EntityState.Deleted;
+                    }
+                }
+
+                foreach (var item in Inscripcion.DetalleAsignaturas)
+                {
+                    if (item.InscripcionDetalleId == 0)
+                    {
+                        contexto.Entry(item).State = EntityState.Added;
+                    }
+                    else
+                    {
+                        contexto.Entry(item).State = EntityState.Modified;
+                    }
+                }
+
+                Estudiante.Balance += Inscripcion.Monto;
+                estudiantesController.Insertar(Estudiante);
 
                 contexto.Entry(Inscripcion).State = EntityState.Modified;
                 paso = contexto.SaveChanges() > 0;
@@ -95,12 +130,17 @@ namespace Tarea4_SistemadeInscripcion.Controllers
 
             bool paso = false;
             Contexto contexto = new Contexto();
-            Inscripciones Inscripcion = contexto.Inscripciones.Find(Id);
+            Inscripciones Inscripcion = new Inscripciones();
+            EstudiantesController estudiantesController = new EstudiantesController();
+            
 
             try
             {
+                Inscripcion = contexto.Inscripciones.Find(Id);
+                contexto.Estudiantes.Find(Inscripcion.EstudianteId).Balance -= Inscripcion.Monto;
 
-                contexto.Entry(Inscripcion).State = EntityState.Deleted;
+                //contexto.Entry(Inscripcion).State = EntityState.Deleted;
+                contexto.Inscripciones.Remove(Inscripcion);
                 paso = contexto.SaveChanges() > 0;
             }
             catch (Exception)
@@ -122,11 +162,17 @@ namespace Tarea4_SistemadeInscripcion.Controllers
 
             Contexto contexto = new Contexto();
             Inscripciones Inscripcion = new Inscripciones();
+            InscripcionDetalleController inscripcionDetalleController = new InscripcionDetalleController();
 
             try
             {
 
                 Inscripcion = contexto.Inscripciones.Find(Id);
+                if(Inscripcion != null)
+                {
+
+                    Inscripcion.DetalleAsignaturas = inscripcionDetalleController.GetList(p => p.InscripcionId == Id);
+                }
             }
             catch (Exception)
             {

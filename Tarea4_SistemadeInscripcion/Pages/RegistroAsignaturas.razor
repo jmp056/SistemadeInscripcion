@@ -8,6 +8,8 @@
 
         <h1>Registro de Asignaturas</h1>
 
+        <br />
+
         <div class="form-group">
             <div class="form-inline">
                 <label for="AsignatudaId" class="col-4">Codigo de la Asignatura:</label>
@@ -20,16 +22,16 @@
             <div class="form-inline">
                 <label for="Codigo" class="col-4">Codigo:</label>
                 <InputText @bind-Value="Asignatura.Codigo" class="form-control col-4" />
-                <ValidationMessage For="@(() => Asignatura.Codigo)" />
             </div>
+            <ValidationMessage For="@(() => Asignatura.Codigo)" />
         </div>
 
         <div class="form-group">
             <div class="form-inline">
                 <label for="Descripcion" class="col-4">Descripcion:</label>
                 <InputText @bind-Value="Asignatura.Descripcion" class="form-control col-4" />
-                <ValidationMessage For="@(() => Asignatura.Descripcion)" />
             </div>
+            <ValidationMessage For="@(() => Asignatura.Descripcion)" />
         </div>
 
         <div class="form-group">
@@ -42,13 +44,13 @@
         <div class="form-group">
             <div class="form-inline">
                 <label for="Creditos" class="col-4">Creditos:</label>
-                <InputNumber @bind-Value="Asignatura.Creditos" class="form-control col-3" />
-                <ValidationMessage For="@(() => Asignatura.Creditos)" />
+                <InputNumber @bind-Value="Asignatura.Creditos" class="form-control col-4" />
             </div>
+            <ValidationMessage For="@(() => Asignatura.Creditos)" />
         </div>
 
         <h3>@Mensaje</h3>
-        <ValidationSummary />
+        @*<ValidationSummary />*@
 
         <div>
             <button type="button" class="btn btn-outline-primary" @onclick="Limpiar" style="margin: 5px">Limpiar</button>

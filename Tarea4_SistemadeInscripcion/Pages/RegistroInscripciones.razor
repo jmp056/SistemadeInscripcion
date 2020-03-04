@@ -8,6 +8,8 @@
 
         <h1>Registro de Inscripciones</h1>
 
+        <br />
+
         <div class="form-group">
             <div class="form-inline">
                 <label for="InscripcionId" class="col-4">Codigo de la Inscripcion:</label>
@@ -19,8 +21,22 @@
         <div class="form-group">
             <div class="form-inline">
                 <label for="Fecha" class="col-4">Fecha:</label>
-                <InputDate @bind-Value="Inscripcion.Fecha" class="form-control col-3" />
+                <InputDate @bind-Value="Inscripcion.Fecha" class="form-control col-4" />
             </div>
+        </div>
+
+        <div class="form-group">
+            <div class="form-inline">
+                <label for="EstudianteId" class="col-4">Estudiante:</label>
+                <InputSelect @bind-Value="@EstudianteSeleccionado" class="form-control col-4" id="EstudianteComboBox" @onclick="SeleccionEstudiante">
+                    @foreach (var item in ListadoEstudiantes)
+                    {
+                        <option value="@item.EstudianteId">@item.Nombres</option>
+                    }
+                    <InputNumber @bind-Value="Inscripcion.EstudianteId" class="form-control col-4" />
+                </InputSelect>
+            </div>
+            <ValidationMessage For="@(() => Inscripcion.EstudianteId)" />
         </div>
 
         <div class="form-group">
@@ -28,13 +44,6 @@
                 <label for="Semestre" class="col-4">Semestre:</label>
                 <InputText @bind-Value="Inscripcion.Semestre" class="form-control col-4" />
                 <ValidationMessage For="@(() => Inscripcion.Semestre)" />
-            </div>
-        </div>
-        <div class="form-group">
-            <div class="form-inline">
-                <label for="EstudianteId" class="col-4">Codigo del Estudiante:</label>
-                <InputNumber @bind-Value="Inscripcion.EstudianteId" class="form-control col-3" />
-                <ValidationMessage For="@(() => Inscripcion.EstudianteId)" />
             </div>
         </div>
 
@@ -46,30 +55,28 @@
             </div>
         </div>
 
-        <div class="form-group">
-            <div class="form-inline">
-                <label for="Tomados" class="col-4">Creditos tomados:</label>
-                <InputNumber @bind-Value="Inscripcion.Tomados" class="form-control col-4" />
-                <ValidationMessage For="@(() => Inscripcion.Tomados)" />
+        <div class="form-row border border-secondary rounded-top" style="background-color: gainsboro">
+            <div class="form-group col-6">
+                <div class="form-inline">
+                    <label for="AsignaturaId" style="margin:8px 0px 0px 0px" class="col-2">Asignatura:</label>
+                    <InputSelect @bind-Value="@AsignaturaSeleccionada" class="form-control" @onclick="SeleccionAsignatura">
+                        @foreach (var item in ListadoAsignaturas)
+                        {
+                            <option value="@item.AsignaturaId">@item.Descripcion</option>
+                        }
+                    </InputSelect>
+                </div>
+            </div>
+            <div class="form-group col-6">
+                <div class="form-inline">
+                    <label for="Creditos">Creditos</label>
+                    <InputNumber @bind-Value="Asignatura.Creditos" class="form-control" />
+                </div>
             </div>
         </div>
 
-        <div class="form-group">
-            <div class="form-inline">
-                <label for="Disponibles" class="col-4">Creditos disponibles:</label>
-                <InputNumber @bind-Value="Inscripcion.Disponibles" class="form-control col-4" />
-                <ValidationMessage For="@(() => Inscripcion.Disponibles)" />
-            </div>
-        </div>
-
-        <div class="form-group">
-            <div class="form-inline">
-                <label for="Balance" class="col-4">Balance:</label>
-                <InputNumber @bind-Value="Inscripcion.Balance" class="form-control col-4" />
-            </div>
-        </div>
         <h3>@Mensaje</h3>
-        <ValidationSummary />
+        @*<ValidationSummary />*@
 
         <div>
             <button type="button" class="btn btn-outline-primary" @onclick="Limpiar" style="margin: 5px">Limpiar</button>
@@ -80,9 +87,29 @@
     </EditForm>
 </div>
 
+
 @code{
     Inscripciones Inscripcion = new Inscripciones();
+    Asignaturas Asignatura = new Asignaturas();
     string Mensaje = string.Empty;
+
+
+    private string EstudianteSeleccionado { get; set; }
+    private string AsignaturaSeleccionada { get; set; }
+
+
+    public List<Estudiantes> ListadoEstudiantes;
+    public List<Asignaturas> ListadoAsignaturas;
+
+    protected override void OnInitialized()
+    {
+        EstudiantesController estudiantesController = new EstudiantesController();
+        ListadoEstudiantes = estudiantesController.GetList(e => true);
+
+        AsignaturasController asignaturasController = new AsignaturasController();
+        ListadoAsignaturas = asignaturasController.GetList(e => true);
+    }
+
 
     private void Guardar()
     {
@@ -93,7 +120,7 @@
         InscripcionTemporal = inscripcionesController.Buscar(Inscripcion.InscripcionId);
         if (InscripcionTemporal != null || Inscripcion.InscripcionId == 0)
         {
-            if(estado == 0)
+            if (estado == 0)
             {
                 estado = 1;
             }
@@ -145,6 +172,7 @@
         {
             Limpiar();
             Inscripcion = InscripcionTemporal;
+            EstudianteSeleccionado = Convert.ToString(Inscripcion.EstudianteId);
             Mensaje = "Inscripcion encontrada de manera exitosa!...";
         }
         else
@@ -197,14 +225,35 @@
 
     private void Limpiar()
     {
-
         Inscripcion = new Inscripciones();
         Mensaje = string.Empty;
+    }
+
+    private void SeleccionEstudiante()
+    {
+        Inscripcion.EstudianteId = Convert.ToInt32(EstudianteSeleccionado);
+    }
+
+    private void SeleccionAsignatura()
+    {
+        AsignaturasController asignaturasController = new AsignaturasController();
+        try
+		{
+			Asignatura = asignaturasController.Buscar(Convert.ToInt32(AsignaturaSeleccionada));
+		}
+		catch (Exception ex)
+		{
+			Mensaje = ex.ToString();
+		}
+        //int id = Convert.ToInt32(AsignaturaSeleccionada);
+
+        //Asignatura = asignaturasController.Buscar(id);
     }
 
     private void Calcular()
     {
         Inscripcion.Disponibles = Inscripcion.Limite - Inscripcion.Tomados;
+
     }
 
 }
